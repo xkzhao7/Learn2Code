@@ -7,8 +7,10 @@ class LinkedList:
     def __init__(self):
         self.head = None
         self.tail = None
+        self.size = 0
     def add(self, value):
         n1 = Node(value)
+        self.size += 1
         if self.head is None:
             self.head = n1
             self.tail = n1
@@ -16,16 +18,21 @@ class LinkedList:
             self.tail.next = n1
             self.tail = n1
     def remove(self, pos):
+        self.size -= 1
         n1 = self.head
         if pos == 0:
             self.head = n1.next
+            return n1.data
         for i in range(pos-1):
             n1 = n1.next
-        if n1.next is self.tail:
+        if (n1.next is self.tail):
             self.tail = n1
+            n2 = n1.next
             n1.next = None
-        else:
-            n1.next = n1.next.next
+            return n2.data
+        n2 = n1.next
+        n1.next = n1.next.next
+        return n2.data
     def getValue(self, pos):
         n1 = self.head
         for i in range(pos):
@@ -84,6 +91,8 @@ class LinkedList:
             v.add(n1.data)
             n1 = n1.next
         print(v.getArray())
+    def get_size(self):
+        return self.size
 if __name__ == "__main__":
     l = LinkedList()
     for i in range(1, 11):
