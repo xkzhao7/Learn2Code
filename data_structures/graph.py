@@ -6,34 +6,38 @@ class Graph:
     def add_node(self, node):
         self.graph[node] = set()
     def add_edge(self, node1, node2, directed=True):
-        self.graph[node1].add(node2)
-        if not directed:
+        if directed:
+            self.graph[node1].add(node2)
+        else:
             self.graph[node2].add(node1)
     def dfs(self, node, visited=None, fn=print):
         if visited is None:
             visited = set()
-        if node not in visited:
-            fn(node)
+        if node in visited:
+            return
+        else:
             visited.add(node)
+            fn(node)
             for neighbor in self.graph[node]:
                 self.dfs(neighbor, visited)
-    def bfs(self, source, fn=None, yield_nodes=False):
+    def bfs(self, source, fn=print, yield_nodes=False):
         visited = set()
         queue = LinkedList()
         queue.add(source)
 
         while queue.get_size() > 0:
             current = queue.remove(0)
-            if current not in visited:
-                if fn:
-                    fn(current)
-                elif yield_nodes:
-                    yield current
-                visited.add(current)
-                for neighbor in self.graph[current]:
-                    queue.add(neighbor)
+            if current in visited:
+                continue
+            visited.add(current)
+            if fn:
+                fn(current)
+            elif yield_nodes:
+                yield current
+            for neighbor in self.graph[current]:
+                queue.add(neighbor)
     def has_path(self, node, destination):
-        for value in self.bfs(node, yield_nodes=True):
+        for value in self.bfs(node, fn=None, yield_nodes=True):
             if value == destination:
                 return True
         return False
