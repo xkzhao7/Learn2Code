@@ -9,6 +9,7 @@ class Graph:
         if directed:
             self.graph[node1].add(node2)
         else:
+            self.graph[node1].add(node2)
             self.graph[node2].add(node1)
     def dfs(self, node, visited=None, fn=print):
         if visited is None:
@@ -52,6 +53,16 @@ class Graph:
         #         if self.has_path(neighbor, destination, visited):
         #             return True
         # return False
+    def connected_components_count(self):
+        count = 0
+        visited = set()
+        for node in self.graph.keys():
+            if node not in visited:
+                visited.add(node)
+                count += 1
+                for value in self.bfs(node, fn=None, yield_nodes=True):
+                    visited.add(value)
+        return count
 if __name__ == "__main__":
     g = Graph()
 
@@ -70,3 +81,24 @@ if __name__ == "__main__":
     g.add_edge("J", "I")
 
     print(g.has_path("F", "K"))
+
+    g2 = Graph()
+
+    g2.add_node("I")
+    g2.add_node("J")
+    g2.add_node("K")
+    g2.add_node("L")
+    g2.add_node("M")
+    g2.add_node("N")
+    g2.add_node("O")
+    
+    g2.add_edge("I", "J", directed=False)
+    g2.add_edge("I", "K", directed=False)
+    g2.add_edge("K", "J", directed=False)
+    g2.add_edge("L", "K", directed=False)
+    g2.add_edge("M", "K", directed=False)
+    g2.add_edge("O", "N", directed=False)
+
+    print(g2.has_path("I", "J"))
+    print(g2.connected_components_count())
+
